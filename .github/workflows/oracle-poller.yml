@@ -1,0 +1,36 @@
+# .github/workflows/oracle-poller.yml
+
+name: Oracle Free Tier Poller
+
+on:
+  schedule:
+    # Runs every 5 minutes (GitHub's minimum interval)
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Also allows manual trigger from GitHub UI
+
+jobs:
+  poll-oracle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Oracle SDK
+        run: pip install oci
+
+      - name: Run Oracle poller
+        env:
+          # Store your Oracle credentials as GitHub Secrets (never hardcode them)
+          OCI_USER_OCID: ${{ secrets.OCI_USER_OCID }}
+          OCI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
+          OCI_TENANCY_OCID: ${{ secrets.OCI_TENANCY_OCID }}
+          OCI_REGION: ${{ secrets.OCI_REGION }}
+          OCI_PRIVATE_KEY: ${{ secrets.OCI_PRIVATE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python poll_oracle.py
