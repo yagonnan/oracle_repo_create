@@ -21,7 +21,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install Oracle SDK
-        run: pip install oci
+        run: pip3 install oci
 
       - name: Run Oracle poller
         env:
