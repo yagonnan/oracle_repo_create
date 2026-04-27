@@ -1,4 +1,4 @@
-# poll_oracle.py
+# poller.py
 import oci
 import os
 import requests
@@ -58,7 +58,7 @@ def try_create_instance(config):
             memory_in_gbs=24  # Max free tier: 24GB RAM total
         ),
         
-        availability_domain="YOUR_AD_NAME",  # Get from OCI console
+        availability_domain=os.environ["OCI_AVAILABILITY_DOMAIN"],  # Get from OCI console
         subnet_id=SUBNET_ID,
         
         source_details=oci.core.models.InstanceSourceViaImageDetails(
